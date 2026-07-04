@@ -744,7 +744,27 @@ body {
 
 @media (max-width: 768px) {
     .nav-arrow {
-        display: none;
+        top: 50%;
+        bottom: auto;
+        width: 42px;
+        height: 42px;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    .nav-arrow:hover {
+        background: rgba(255, 255, 255, 0.22);
+        transform: translateY(-50%);
+    }
+
+    .nav-arrow.prev {
+        left: 10px;
+    }
+
+    .nav-arrow.next {
+        right: 10px;
     }
 }
 
