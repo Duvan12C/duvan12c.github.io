@@ -5,10 +5,6 @@ const targetDate = new Date("2026-07-25T17:00:00").getTime();
 let activeSlideIndex = 0;
 const totalSlides = 4; // Slides 1 to 4
 let musicStarted = false;
-let touchStartX = 0;
-let touchStartY = 0;
-let touchStartSlide = 0;
-let isTouchingSlider = false;
 
 // DOM Elements
 const envelope = document.getElementById("envelope");
@@ -315,50 +311,12 @@ dots.forEach((dot, index) => {
 
 function scrollToSlide(index) {
     const width = sliderTrack.clientWidth;
-    const nextIndex = Math.max(0, Math.min(totalSlides - 1, index));
-    activeSlideIndex = nextIndex;
     sliderTrack.scrollTo({
-        left: nextIndex * width,
+        left: index * width,
         behavior: 'smooth'
     });
-    updateActiveDot(nextIndex);
+    updateActiveDot(index);
 }
-
-sliderTrack.addEventListener("touchstart", (e) => {
-    if (e.touches.length !== 1) return;
-
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-    touchStartSlide = activeSlideIndex;
-    isTouchingSlider = true;
-}, { passive: true });
-
-sliderTrack.addEventListener("touchend", (e) => {
-    if (!isTouchingSlider || e.changedTouches.length !== 1) return;
-
-    const deltaX = e.changedTouches[0].clientX - touchStartX;
-    const deltaY = e.changedTouches[0].clientY - touchStartY;
-    const absX = Math.abs(deltaX);
-    const absY = Math.abs(deltaY);
-    const minSwipeDistance = 45;
-
-    isTouchingSlider = false;
-
-    if (absY > absX || absX < minSwipeDistance) {
-        scrollToSlide(touchStartSlide);
-        return;
-    }
-
-    if (deltaX < 0) {
-        scrollToSlide(touchStartSlide + 1);
-    } else {
-        scrollToSlide(touchStartSlide - 1);
-    }
-}, { passive: true });
-
-sliderTrack.addEventListener("touchcancel", () => {
-    isTouchingSlider = false;
-}, { passive: true });
 
 // Ensure proper slide sizing on resize
 window.addEventListener("resize", () => {
